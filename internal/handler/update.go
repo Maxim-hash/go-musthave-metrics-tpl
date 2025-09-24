@@ -18,8 +18,8 @@ func UpdateHandler(storage *models.MemStorage) http.HandlerFunc {
 		path := strings.TrimPrefix(r.URL.Path, "/update/")
 		parts := strings.Split(path, "/")
 
-		if len(parts) != 3 {
-			http.Error(w, "bad request", http.StatusBadRequest)
+		if len(parts) <= 2 {
+			http.Error(w, "bad request", http.StatusNotFound)
 			return
 		}
 
