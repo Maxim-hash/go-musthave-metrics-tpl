@@ -23,6 +23,14 @@ func (s *Sender) SendMetric(metricType, metricName, metricValue string) error {
 	if err != nil {
 		return err
 	}
-	_, err = s.Client.Do(req)
-	return err
+	req.Header.Set("Content-Type", "text/plain")
+	resp, err := s.Client.Do(req)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+	if resp.StatusCode != http.StatusOK {
+		return fmt.Errorf("server returned %d", resp.StatusCode)
+	}
+	return nil
 }
