@@ -28,6 +28,7 @@ func main() {
 		case <-pollTicker.C:
 			last = collector.Collect()
 		case <-reportTicker.C:
+			log.Println("Sending metrics to server...")
 			for name, value := range last.Gauges {
 				if err := sender.SendMetric("gauge", name, fmt.Sprintf("%f", value)); err != nil {
 					log.Printf("send gauge %s failed: %v", name, err)
