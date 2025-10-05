@@ -9,6 +9,6 @@ var (
 )
 
 func ParseFlags() {
-	flag.StringVar(&flagRunAddr, "a", "localhost:8080", "Server listen address")
+	flag.StringVar(&flagRunAddr, "a", ":8080", "Server listen address")
 	flag.Parse()
 }

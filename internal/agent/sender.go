@@ -18,7 +18,7 @@ func NewSender(serverAddr string) *Sender {
 }
 
 func (s *Sender) SendMetric(metricType, metricName, metricValue string) error {
-	r := fmt.Sprintf("%s/update/%s/%s/%s", s.ServerAddr, metricType, metricName, metricValue)
+	r := fmt.Sprintf("http://%s/update/%s/%s/%s", s.ServerAddr, metricType, metricName, metricValue)
 	req, err := http.NewRequest(http.MethodPost, r, nil)
 	if err != nil {
 		return err
