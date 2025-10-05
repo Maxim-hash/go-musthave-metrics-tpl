@@ -1,5 +1,7 @@
 package models
 
+import "strconv"
+
 type MemStorage struct {
 	counters map[string]int64
 	gauges   map[string]float64
@@ -28,4 +30,15 @@ func (ms *MemStorage) GetCounter(name string) (int64, bool) {
 func (ms *MemStorage) GetGauge(name string) (float64, bool) {
 	val, ok := ms.gauges[name]
 	return val, ok
+}
+
+func (ms *MemStorage) GetAllMetrics() map[string]string {
+	result := make(map[string]string)
+	for k, v := range ms.counters {
+		result[k] = strconv.FormatInt(v, 10)
+	}
+	for k, v := range ms.gauges {
+		result[k] = strconv.FormatFloat(v, 'f', -1, 64)
+	}
+	return result
 }

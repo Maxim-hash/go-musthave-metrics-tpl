@@ -17,7 +17,7 @@ func TestUpdateHandler_OK_Gauge(t *testing.T) {
 	req := httptest.NewRequest(http.MethodPost, "/update/gauge/Alloc/123.5", nil)
 	w := httptest.NewRecorder()
 
-	h(w, req)
+	h.ServeHTTP(w, req)
 	if w.Code != http.StatusOK {
 		t.Fatalf("want 200, got %d", w.Code)
 	}

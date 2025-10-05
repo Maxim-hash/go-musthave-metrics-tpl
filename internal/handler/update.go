@@ -3,9 +3,9 @@ package handler
 import (
 	"net/http"
 	"strconv"
-	"strings"
 
 	models "github.com/Maxim-hash/go-musthave-metrics-tpl/internal/model"
+	"github.com/go-chi/chi/v5"
 )
 
 func UpdateHandler(storage *models.MemStorage) http.HandlerFunc {
@@ -15,15 +15,9 @@ func UpdateHandler(storage *models.MemStorage) http.HandlerFunc {
 			return
 		}
 
-		path := strings.TrimPrefix(r.URL.Path, "/update/")
-		parts := strings.Split(path, "/")
-
-		if len(parts) <= 2 {
-			http.Error(w, "bad request", http.StatusNotFound)
-			return
-		}
-
-		metricType, metricName, metricValue := parts[0], parts[1], parts[2]
+		metricType := chi.URLParam(r, "metricType")
+		metricName := chi.URLParam(r, "metricName")
+		metricValue := chi.URLParam(r, "metricValue")
 
 		if metricName == "" {
 			http.Error(w, "bad request", http.StatusNotFound)
