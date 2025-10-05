@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
@@ -10,6 +11,14 @@ import (
 )
 
 func main() {
+	ParseFlags()
+
+	if err := run(); err != nil {
+		panic(err)
+	}
+}
+
+func run() error {
 	r := chi.NewRouter()
 	storage := models.NewMemStorage()
 
@@ -21,8 +30,6 @@ func main() {
 			r.Get("/", handlers.GetMetricValueHandler(storage))
 		})
 	})
-
-	if err := http.ListenAndServe(":8080", r); err != nil {
-		panic(err)
-	}
+	fmt.Println("Server running on ", flagRunAddr)
+	return http.ListenAndServe(flagRunAddr, r)
 }
