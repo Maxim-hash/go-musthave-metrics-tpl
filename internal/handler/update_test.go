@@ -8,16 +8,18 @@ import (
 
 	handler "github.com/Maxim-hash/go-musthave-metrics-tpl/internal/handler"
 	models "github.com/Maxim-hash/go-musthave-metrics-tpl/internal/model"
+	"github.com/go-chi/chi/v5"
 )
 
 func TestUpdateHandler_OK_Gauge(t *testing.T) {
 	st := models.NewMemStorage()
-	h := handler.UpdateHandler(st)
+	r := chi.NewRouter()
+	r.Post("/update/{metricType}/{metricName}/{metricValue}", handler.UpdateHandler(st))
 
 	req := httptest.NewRequest(http.MethodPost, "/update/gauge/Alloc/123.5", nil)
 	w := httptest.NewRecorder()
 
-	h.ServeHTTP(w, req)
+	r.ServeHTTP(w, req)
 	if w.Code != http.StatusOK {
 		t.Fatalf("want 200, got %d", w.Code)
 	}
