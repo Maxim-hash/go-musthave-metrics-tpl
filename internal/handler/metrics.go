@@ -11,14 +11,10 @@ import (
 
 func GetMetricsHandler(storage *models.MemStorage) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		if r.Method != http.MethodGet {
-			http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
-			return
-		}
-
 		w.Header().Set("Content-Type", "application/json")
 		metrics := storage.GetAllMetrics()
 		var str string
+
 		for name, value := range metrics {
 			str += name + ": " + fmt.Sprintf("%v", value) + "\n"
 		}
@@ -30,10 +26,6 @@ func GetMetricsHandler(storage *models.MemStorage) http.HandlerFunc {
 
 func GetMetricValueHandler(storage *models.MemStorage) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		if r.Method != http.MethodGet {
-			http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
-			return
-		}
 		metricType := chi.URLParam(r, "metricType")
 		metricName := chi.URLParam(r, "metricName")
 
