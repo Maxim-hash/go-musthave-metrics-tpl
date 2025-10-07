@@ -20,6 +20,10 @@ func NewCollector() *Collector {
 	return &Collector{}
 }
 
+func (c *Collector) Reset() {
+	c.PollCount = 0
+}
+
 func (c *Collector) Collect() Record {
 	var m runtime.MemStats
 	runtime.ReadMemStats(&m)

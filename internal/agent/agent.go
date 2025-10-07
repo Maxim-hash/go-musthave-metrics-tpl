@@ -36,7 +36,9 @@ func (a *Agent) Run(pollTicker, reportTicker *time.Ticker) {
 			for name, value := range last.Counters {
 				if err := a.Sender.SendMetric("counter", name, fmt.Sprintf("%d", value)); err != nil {
 					log.Printf("send counter %s failed: %v", name, err)
+
 				}
+				a.Collector.Reset()
 			}
 
 		}
