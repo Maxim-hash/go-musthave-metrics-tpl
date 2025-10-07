@@ -15,7 +15,7 @@ func UpdateHandler(storage *models.MemStorage) http.HandlerFunc {
 		metricValue := chi.URLParam(r, "metricValue")
 
 		if metricName == "" {
-			http.Error(w, "bad request", http.StatusNotFound)
+			http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 			return
 		}
 
@@ -24,19 +24,19 @@ func UpdateHandler(storage *models.MemStorage) http.HandlerFunc {
 		case "counter":
 			val, err := strconv.ParseInt(metricValue, 10, 64)
 			if err != nil {
-				http.Error(w, "bad request", http.StatusBadRequest)
+				http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 				return
 			}
 			storage.UpdateCounter(metricName, val)
 		case "gauge":
 			val, err := strconv.ParseFloat(metricValue, 64)
 			if err != nil {
-				http.Error(w, "bad request", http.StatusBadRequest)
+				http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 				return
 			}
 			storage.UpdateGauge(metricName, (val))
 		default:
-			http.Error(w, "bad request", http.StatusBadRequest)
+			http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 			return
 		}
 	}

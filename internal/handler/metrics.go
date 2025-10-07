@@ -33,7 +33,7 @@ func GetMetricValueHandler(storage *models.MemStorage) http.HandlerFunc {
 		case "counter":
 			val, ok := storage.GetCounter(metricName)
 			if !ok {
-				http.Error(w, "not found", http.StatusNotFound)
+				http.Error(w, http.StatusText(http.StatusNotFound), http.StatusNotFound)
 				return
 			}
 			w.WriteHeader(http.StatusOK)
@@ -41,13 +41,13 @@ func GetMetricValueHandler(storage *models.MemStorage) http.HandlerFunc {
 		case "gauge":
 			val, ok := storage.GetGauge(metricName)
 			if !ok {
-				http.Error(w, "not found", http.StatusNotFound)
+				http.Error(w, http.StatusText(http.StatusNotFound), http.StatusNotFound)
 				return
 			}
 			w.WriteHeader(http.StatusOK)
 			w.Write([]byte(strconv.FormatFloat(val, 'f', -1, 64)))
 		default:
-			http.Error(w, "not found", http.StatusNotFound)
+			http.Error(w, http.StatusText(http.StatusNotFound), http.StatusNotFound)
 			return
 		}
 	}
