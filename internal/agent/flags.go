@@ -17,5 +17,6 @@ func ParseFlags() *Flags {
 	flag.IntVar(&flags.FlagReportInterval, "r", 10, "Reporting interval in seconds")
 
 	flag.Parse()
+
 	return flags
 }

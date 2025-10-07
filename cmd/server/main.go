@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+	"log"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
@@ -31,6 +31,7 @@ func run(flags *flags.Flags) error {
 			r.Get("/", handlers.GetMetricValueHandler(storage))
 		})
 	})
-	fmt.Println("Server running on ", flags.FlagRunAddr)
+	log.Println("Server running on ", flags.FlagRunAddr)
+
 	return http.ListenAndServe(flags.FlagRunAddr, r)
 }
