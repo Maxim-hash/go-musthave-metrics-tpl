@@ -9,12 +9,12 @@ import (
 )
 
 func main() {
-	ParseFlags()
+	flags := agent.ParseFlags()
 
 	var (
-		pollInterval   = time.Duration(flagPollInterval) * time.Second
-		reportInterval = time.Duration(flagReportInterval) * time.Second
-		serverAddr     = flagServerAddr
+		pollInterval   = time.Duration(flags.FlagPollInterval) * time.Second
+		reportInterval = time.Duration(flags.FlagReportInterval) * time.Second
+		serverAddr     = flags.FlagServerAddr
 	)
 
 	collector := agent.NewCollector()

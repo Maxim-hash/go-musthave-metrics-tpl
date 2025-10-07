@@ -6,19 +6,20 @@ import (
 
 	"github.com/go-chi/chi/v5"
 
+	"github.com/Maxim-hash/go-musthave-metrics-tpl/internal/config/flags"
 	handlers "github.com/Maxim-hash/go-musthave-metrics-tpl/internal/handler"
 	models "github.com/Maxim-hash/go-musthave-metrics-tpl/internal/model"
 )
 
 func main() {
-	ParseFlags()
+	flags := flags.ParseFlags()
 
-	if err := run(); err != nil {
+	if err := run(flags); err != nil {
 		panic(err)
 	}
 }
 
-func run() error {
+func run(flags *flags.Flags) error {
 	r := chi.NewRouter()
 	storage := models.NewMemStorage()
 
@@ -30,6 +31,6 @@ func run() error {
 			r.Get("/", handlers.GetMetricValueHandler(storage))
 		})
 	})
-	fmt.Println("Server running on ", flagRunAddr)
-	return http.ListenAndServe(flagRunAddr, r)
+	fmt.Println("Server running on ", flags.FlagRunAddr)
+	return http.ListenAndServe(flags.FlagRunAddr, r)
 }
