@@ -12,14 +12,14 @@ import (
 )
 
 func main() {
-	flags := flags.ParseFlags()
+	cfg := flags.ParseFlags()
 
-	if err := run(flags); err != nil {
+	if err := run(cfg); err != nil {
 		panic(err)
 	}
 }
 
-func run(flags *flags.Flags) error {
+func run(cfg *flags.Config) error {
 	r := chi.NewRouter()
 	storage := models.NewMemStorage()
 
@@ -31,7 +31,7 @@ func run(flags *flags.Flags) error {
 			r.Get("/", handlers.GetMetricValueHandler(storage))
 		})
 	})
-	log.Println("Server running on ", flags.FlagRunAddr)
+	log.Println("Server running on ", cfg.FlagRunAddr)
 
-	return http.ListenAndServe(flags.FlagRunAddr, r)
+	return http.ListenAndServe(cfg.FlagRunAddr, r)
 }
