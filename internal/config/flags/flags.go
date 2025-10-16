@@ -2,22 +2,22 @@ package flags
 
 import (
 	"flag"
-	"log"
 
 	"github.com/caarlos0/env/v6"
 )
 
 type Config struct {
-	FlagRunAddr string `env:"ADDRESS"`
+	FlagRunAddr  string `env:"ADDRESS"`
+	FlagLogLevel string `env:"LOG_LEVEL"`
 }
 
 func ParseFlags() *Config {
 	flags := &Config{}
 	flag.StringVar(&flags.FlagRunAddr, "a", ":8080", "Server listen address")
+	flag.StringVar(&flags.FlagLogLevel, "l", "info", "Logging level")
 	flag.Parse()
-	if err := env.Parse(flags); err != nil {
-		log.Fatalf("Error parsing environment variables: %v", err)
-	}
+
+	env.Parse(flags)
 
 	return flags
 }

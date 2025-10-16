@@ -1,13 +1,15 @@
 package main
 
 import (
-	"log"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
+	"go.uber.org/zap"
 
 	"github.com/Maxim-hash/go-musthave-metrics-tpl/internal/config/flags"
 	handlers "github.com/Maxim-hash/go-musthave-metrics-tpl/internal/handler"
+	"github.com/Maxim-hash/go-musthave-metrics-tpl/internal/logger"
+	"github.com/Maxim-hash/go-musthave-metrics-tpl/internal/middleware"
 	models "github.com/Maxim-hash/go-musthave-metrics-tpl/internal/model"
 )
 
@@ -20,7 +22,12 @@ func main() {
 }
 
 func run(cfg *flags.Config) error {
+	if err := logger.NewLogger(cfg.FlagLogLevel); err != nil {
+		return err
+	}
+	logger.Log.Info("Running server", zap.String("address", cfg.FlagRunAddr))
 	r := chi.NewRouter()
+	r.Use(middleware.WithLogging)
 	storage := models.NewMemStorage()
 
 	r.Post("/update/{metricType}/{metricName}/{metricValue}", handlers.UpdateHandler(storage))
@@ -31,7 +38,6 @@ func run(cfg *flags.Config) error {
 			r.Get("/", handlers.GetMetricValueHandler(storage))
 		})
 	})
-	log.Println("Server running on ", cfg.FlagRunAddr)
 
 	return http.ListenAndServe(cfg.FlagRunAddr, r)
 }
